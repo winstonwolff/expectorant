@@ -26,10 +26,9 @@ function.
 
 Output looks like this:
 
-'''
     simple_test
       should add 1 and 1                      2 == 2 [OK] 
-'''
+
 
 Parameterized Tests
 -------------------
@@ -42,7 +41,6 @@ parameters to check.equal() can take multiple parameters after your
 two test values and they will be printed out with spaces between
 each paramater, just like with print()
 
-
     @test
     def parameterized_test(check):
         for a, b, e in (
@@ -53,6 +51,7 @@ each paramater, just like with print()
             check.equal(add(a, b), e, 'adding', a, b)
 
 Output looks like this:
+
     parameterized_test
       adding 1 1                           2 == 99 [FAIL]
       adding 2 2                            4 == 4 [OK]
@@ -98,13 +97,14 @@ independent.
                 check.equal(out, expected, 'inputs=', inputs)
 
 Output:
-  accumulate_test
-    zeroed_accumulator
-      inputs= (1, 1)                        2 == 2 [OK]
-    zeroed_accumulator
-      inputs= (2, 3)                        5 == 5 [OK]
-    zeroed_accumulator
-      inputs= (1, 2, 3, 4)                10 == 10 [OK]
+
+    accumulate_test
+      zeroed_accumulator
+        inputs= (1, 1)                        2 == 2 [OK]
+      zeroed_accumulator
+        inputs= (2, 3)                        5 == 5 [OK]
+      zeroed_accumulator
+        inputs= (1, 2, 3, 4)                10 == 10 [OK]
 
 Conclusion
 ----------
