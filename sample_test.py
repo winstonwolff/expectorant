@@ -45,7 +45,21 @@ def add(a, b):
 @test
 def simple_test(check):
     '''Here is a simple test.'''
-    check.equal(add(1, 1), 2, 'adding', 1, 1)
+    check.equal(1+1, 2,  'adding', 1, 1)
+    check.equal(1-2, -1, 'subtract', 1, 1)
+
+@test
+def test_with_setup(check):
+    #with setup():
+        check.equal( 1+1, 2 * 1)
+
+class mytest(object):
+    def a(self, check):
+        check.equal(1+1, 2)
+    def a(self, check):
+        check.equal(1+1, 2)
+
+    lambda check:check.equal(1+2, 2)
 
 #
 # Test sets of data with one function
@@ -109,7 +123,7 @@ def exception_in_function_under_test(check):
     check.equal(2.0, divide(2, 1), 'divides 2 1')
     check.equal(0.0, divide(2, 0), 'divides 2 0')
 
-            
+
 def engage_dilithium_thrusters():
     '''pretend setup function'''
     pass
@@ -151,7 +165,7 @@ def exception_during_setup(check):
     '''
     def faulty_setup():
         raise ValueError('sample error in setup function')
-    
+
     with check.setup(engage_dilithium_thrusters):
         with check.setup(faulty_setup):
             check.equal(2, 2)
@@ -164,11 +178,11 @@ def exception_during_teardown(check):
     def faulty_setup():
         yield
         raise ValueError('sample error in teardown function')
-    
+
     with check.setup(faulty_setup):
         check.equal(2, 2)
-    
-                
+
+
 if __name__=='__main__':
 #     run_tests([nested])
     run_tests()
