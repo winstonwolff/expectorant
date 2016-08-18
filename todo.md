@@ -1,6 +1,10 @@
 To Do
 -----
 
+- proper test loader
+
+- write tests in Expectorant itself!
+
 - better expect() syntax
 
     - check for side-effects to change
@@ -8,8 +12,6 @@ To Do
     - check for raising exceptions
 
 - allow users to write new test functions easily
-
-- decouple testing from reporting
 
 - use codec hack to hide `def _():`
 
@@ -24,3 +26,11 @@ To Do
 
 - Testing system with state / side-effects
 
+- async tests
+
+
+
+Done
+----
+- write in RSpec describe-context-it format
+- decouple testing from reporting
