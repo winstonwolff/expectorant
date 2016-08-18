@@ -22,12 +22,12 @@ def _():
     def _():
 
         @before
-        def _():
+        def _(expect):
             nonlocal soda_fountain
             soda_fountain = SodaFountain()
 
         @after
-        def _():
+        def _(expect):
             soda_fountain.shutdown()
 
         def subject(val):
@@ -49,7 +49,7 @@ def _():
         def _():
 
             @before
-            def _():
+            def _(expect):
                 soda_fountain.pour(1)
 
             @it("pouring another leaves 8 left")

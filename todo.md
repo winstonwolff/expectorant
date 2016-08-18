@@ -5,13 +5,15 @@ To Do
 
 - write tests in Expectorant itself!
 
+- install with pip
+
 - better expect() syntax
 
     - check for side-effects to change
 
     - check for raising exceptions
 
-- allow users to write new test functions easily
+    - allow users to write new test functions easily
 
 - use codec hack to hide `def _():`
 
@@ -23,8 +25,6 @@ To Do
         - inside setup
         - inside teardown
         - inside testing framework
-
-- Testing system with state / side-effects
 
 - async tests
 

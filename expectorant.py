@@ -5,11 +5,28 @@ import ansi
 
 TestResult = namedtuple("TestResult", 'passing description')
 
-class ExpectationTester:
-    '''Tests and collects results for one test case'''
+class Checker:
+    '''
+    Runs one test case and all it's before/after functions and collects
+    results.
+    '''
     def __init__(self, test_node):
+        assert isinstance(test_node, TestCase)
         self.test_node = test_node
         self.results = []
+
+        # run before funcs
+        for c in test_node.containers:
+            assert isinstance(c, Container)
+            if c.before: c.before(self)
+
+        # run the test itself
+        test_node.test_func(self)
+
+        # run after funcs
+        for c in reversed(test_node.containers):
+            assert isinstance(c, Container)
+            if c.after: c.after(self)
 
     def is_equal(self, a, b, msg=None):
         is_passing = (a == b)
@@ -62,7 +79,7 @@ class Container(Node):
     def is_test(self): return False
 
 
-class TestAccumulator:
+class Suite:
     '''Builds tree of tests and their contexts'''
     def __init__(self):
         self.stack = [Container([], "root")]
@@ -106,25 +123,25 @@ class TestAccumulator:
         for root in self.stack:
             print_node(root)
 
-_tacc = TestAccumulator()
+_suite = Suite()
 
 def context(message):
     def wrapper(func):
-        _tacc.push_container(message)
+        _suite.push_container(message)
         func()
-        _tacc.pop_container()
+        _suite.pop_container()
     return wrapper
 
 describe = context
 
 def it(message):
     def wrapper(func):
-        _tacc.add_test(message, func)
+        _suite.add_test(message, func)
     return wrapper
 
 def before(func):
-    _tacc.current_container().before = func
+    _suite.current_container().before = func
 
 def after(func):
-    _tacc.current_container().after = func
+    _suite.current_container().after = func
 
