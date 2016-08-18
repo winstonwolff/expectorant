@@ -1,9 +1,28 @@
+import ansi
+
+# TestResult = namedtuple("TestResult", 'passing test_nodes')
+
+class ExpectationTester:
+    def __init__(self):
+        self.results = []
+
+    def is_equal(self, a, b, msg=""):
+        is_passing = (a == b)
+        if is_passing:
+            color = ansi.GREEN
+            outcome = "pass"
+        else:
+            color = ansi.RED
+            outcome = "fail"
+        print(color + "is_equal", msg, outcome, ansi.RESET)
+
 class TestNode:
     def __init__(self, name, test_func):
         self.name = name
         self.test_func = test_func
         self.before = None
         self.children = []
+
 
 class TestAccumulator:
     def __init__(self):
@@ -58,4 +77,5 @@ def it(message):
 
 def before(func):
     _tacc.current_node().before = func
+
 

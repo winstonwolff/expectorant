@@ -1,50 +1,50 @@
 # Something to be tested
 
-class Adder:
+class SodaFountain:
     def __init__(self):
-        print("!!! Adder: created.")
-        self.sum = 0
+#         print("!!! SodaFountain: created.")
+        self.syrup = 10
 
-    def add(self, val):
-        print("!!! Adder: adding", val)
-        self.sum += val
-        return self
+    def pour(self, quantity):
+#         print("!!! SodaFounding: pouring", quantity)
+        self.syrup -= quantity
 
 # Our tests
 
 from expectorant import describe, context, it, before
 
-@describe("add")
+@describe("SodaFountain")
 def _():
-    adder = "X"
+    soda_fountain = "X"
 
     @before
     def _():
-        nonlocal adder
-        print("!!! add-before called. adder=", adder)
-        adder = Adder()
+        nonlocal soda_fountain
+        soda_fountain = SodaFountain()
 
-    @context("when adding")
+    @context("when one is already poured")
     def _():
 
         @before
         def _():
-            print("!!! when-adding-before called")
-            adder.add(1)
+#             print("!!! when-adding-before called")
+            soda_fountain.pour(1)
 
         def subject(val):
-            print("!!! subject called with", val)
-            adder.add(val)
+#             print("!!! subject called with", val)
+            soda_fountain.pour(val)
 
-        @it("sums 1")
-        def _():
+        @it("pouring another leaves 8 left")
+        def _(expect):
             subject(1)
-            print("!!! it 1 called. sum=", adder.sum)
+            expect.is_equal(soda_fountain.syrup, 8)
+#             print("!!! it 1 called. sum=", soda_fountain.syrup)
 
-        @it("sums 5")
-        def _():
+        @it("pouring 5 leaves 4 left")
+        def _(expect):
             subject(5)
-            print("!!! it 5 called. sum=", adder.sum)
+            expect.is_equal(soda_fountain.syrup, 4)
+#             print("!!! it 5 called. sum=", soda_fountain.syrup)
 #             expect(adder.sum, equals(0))
 
 #             @it("changes score")

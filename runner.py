@@ -11,9 +11,10 @@ def run_tests(test_files):
         depth = len(container_nodes)
         test_node = container_nodes[-1]
         print("  " * depth, test_node.name, sep="")
+        expect = expectorant.ExpectationTester()
         for test_node in container_nodes:
             if test_node.before: test_node.before()
-            if test_node.test_func: test_node.test_func()
+            if test_node.test_func: test_node.test_func(expect)
 
 if __name__=='__main__':
     run_tests(find_test_files())
