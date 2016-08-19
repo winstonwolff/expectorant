@@ -1,25 +1,7 @@
 from copy import copy
-from collections import namedtuple
 
 from . import ansi
 
-TestResult = namedtuple("TestResult", 'passing description')
-
-class Expector:
-    '''
-    Runs one test case and all it's before/after functions and collects the
-    `results`.
-    '''
-    def __init__(self):
-        self.results = []
-
-    def is_equal(self, a, b, msg=None):
-        is_passing = (a == b)
-
-        msgs = ["is_equal: expect {} == {}".format(a, b)]
-        if msg: msgs.append(msg)
-
-        self.results.append(TestResult(is_passing, ' '.join(msgs)))
 
 
 class Node:
