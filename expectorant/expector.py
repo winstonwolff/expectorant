@@ -8,6 +8,7 @@ class Expector:
 
     >>> expect = Expector()
     >>> expect.is_equal(1, 2)
+    Outcome(passing=False, description='is_equal: expect 1 == 2')
     >>> expect.results
     [Outcome(passing=False, description='is_equal: expect 1 == 2')]
     '''
@@ -20,5 +21,7 @@ class Expector:
         msgs = ["is_equal: expect {} == {}".format(a, b)]
         if msg: msgs.append(msg)
 
-        self.results.append(Outcome(is_passing, ' '.join(msgs)))
+        outcome = Outcome(is_passing, ' '.join(msgs))
+        self.results.append(outcome)
+        return outcome
 
