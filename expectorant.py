@@ -5,28 +5,13 @@ import ansi
 
 TestResult = namedtuple("TestResult", 'passing description')
 
-class Checker:
+class Expector:
     '''
-    Runs one test case and all it's before/after functions and collects
-    results.
+    Runs one test case and all it's before/after functions and collects the
+    `results`.
     '''
-    def __init__(self, test_node):
-        assert isinstance(test_node, TestCase)
-        self.test_node = test_node
+    def __init__(self):
         self.results = []
-
-        # run before funcs
-        for c in test_node.containers:
-            assert isinstance(c, Container)
-            if c.before: c.before(self)
-
-        # run the test itself
-        test_node.test_func(self)
-
-        # run after funcs
-        for c in reversed(test_node.containers):
-            assert isinstance(c, Container)
-            if c.after: c.after(self)
 
     def is_equal(self, a, b, msg=None):
         is_passing = (a == b)
@@ -46,6 +31,9 @@ class Node:
         '''Return how many containers, i.e. describe or contexts, enclose this node.'''
         return len(self.containers)
 
+class Scope:
+    '''A place for specs to store values during the test run.'''
+    pass
 
 class TestCase(Node):
     '''A leaf in the tree of tests that represents one `it` statement'''
@@ -60,6 +48,22 @@ class TestCase(Node):
 
     def __repr__(self):
         return "<TestCase:  {}>".format(self.name)
+
+    def run(self, expector):
+        scope = Scope()
+
+        # run before funcs
+        for c in self.containers:
+            assert isinstance(c, Container)
+            if c.before: c.before(scope, expector)
+
+        # run the test itself
+        self.test_func(scope, expector)
+
+        # run after funcs
+        for c in reversed(self.containers):
+            assert isinstance(c, Container)
+            if c.after: c.after(scope, expector)
 
 
 class Container(Node):

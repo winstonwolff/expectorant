@@ -1,26 +1,38 @@
 #! /usr/bin/env python3
+import glob
+import importlib.util
+from pathlib import Path
+
 import expectorant
 import ansi
 
-# def find_test_files():
-#     return ['sample_test.py']
+def load_tests(file_pattern='spec/*_spec.py'):
+    files = glob.glob(file_pattern)
+    print(files)
 
-def load_tests():
-    import sample_test # todo: load test_files instead
+    for filename in files:
+        import_spec(filename)
+
     return expectorant._suite
 
+def import_spec(filename):
+    stem = Path(filename).stem
+    spec = importlib.util.spec_from_file_location(stem, filename)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
 
 def run_tests(test_accumulator):
     for node in test_accumulator.nodes():
         print("  " * node.depth(), node.name, sep="")
         if node.is_test():
-            checker = expectorant.Checker(node)
-            for result in checker.results:
+            expector = expectorant.Expector()
+            node.run(expector)
+            for result in expector.results:
                 color = ansi.GREEN if result.passing else ansi.RED
                 print(color, "  " * (node.depth() + 1), result.description, ansi.RESET, sep="")
 
 if __name__=='__main__':
-    test_tree = load_tests()
+    test_tree = load_tests('*_spec.py')
 #     test_tree.debug_print()
 #     print('---')
     run_tests(test_tree)
