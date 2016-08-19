@@ -41,6 +41,7 @@ def _():
 
             @it("has 0 syrup when pouring 99")
             def _(scope, expect):
+                subject(scope.soda_fountain, 99)
                 expect.is_equal(scope.soda_fountain.syrup, 0)
 
 

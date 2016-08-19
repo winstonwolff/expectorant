@@ -1,8 +1,6 @@
 To Do
 -----
 
-- proper test loader
-
 - write tests in Expectorant itself!
 
 - install with pip
@@ -17,7 +15,6 @@ To Do
 
 - use codec hack to hide `def _():`
 
-- better way to share values through test chain, e.g. pass a mutable 'self'
 
 - Handle exceptions
     - Make samples with exceptions in various places, e.g.
@@ -32,5 +29,7 @@ To Do
 
 Done
 ----
+- better way to share values through test chain, e.g. pass a mutable 'self'
+- proper test loader
 - write in RSpec describe-context-it format
 - decouple testing from reporting
