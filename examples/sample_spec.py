@@ -1,4 +1,4 @@
-# Something to be tested
+# --- Something to be tested
 
 class SodaFountain:
     def __init__(self):
@@ -10,9 +10,10 @@ class SodaFountain:
     def shutdown(self):
         pass
 
-# Our tests
+# --- Our tests
 
-from expectorant import describe, context, it, before, after
+
+from expectorant import *
 
 @describe("SodaFountain")
 def _():

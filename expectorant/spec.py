@@ -1,7 +1,7 @@
 from copy import copy
 from collections import namedtuple
 
-import ansi
+from . import ansi
 
 TestResult = namedtuple("TestResult", 'passing description')
 
