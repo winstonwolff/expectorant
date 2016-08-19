@@ -37,12 +37,12 @@ def _():
 
             @it("has 10 units of syrup")
             def _(scope, expect):
-                expect.is_equal(scope.soda_fountain.syrup, 10)
+                expect(scope.soda_fountain.syrup).to(equal, 10)
 
             @it("has 0 syrup when pouring 99")
             def _(scope, expect):
                 subject(scope.soda_fountain, 99)
-                expect.is_equal(scope.soda_fountain.syrup, 0)
+                expect(scope.soda_fountain.syrup).to(equal, 0)
 
 
         @context("when one is already poured")
@@ -55,10 +55,10 @@ def _():
             @it("pouring another leaves 8 left")
             def _(scope, expect):
                 subject(scope.soda_fountain, 1)
-                expect.is_equal(scope.soda_fountain.syrup, 8)
+                expect(scope.soda_fountain.syrup).to(equal, 8)
 
             @it("pouring 5 leaves 4 left")
             def _(scope, expect):
                 subject(scope.soda_fountain, 5)
-                expect.is_equal(scope.soda_fountain.syrup, 4)
+                expect(scope.soda_fountain.syrup).to(equal, 4)
 

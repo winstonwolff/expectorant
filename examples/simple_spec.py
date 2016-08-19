@@ -9,5 +9,4 @@ def _():
 
     @it("retrieves by key")
     def _(scope, expect):
-        expect.is_equal(scope.dict["a"], 1)
-
+        expect(scope.dict["a"]).to(equal, 1)
