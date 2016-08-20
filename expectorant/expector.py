@@ -24,10 +24,10 @@ class Expector:
     Checks things and keeps a tally of the results.
 
     >>> expect = Expector()
-    >>> expect.is_equal(1, 2)
-    Outcome(passing=False, description='is_equal: expect 1 == 2')
+    >>> expect(1).to_not(equal, 2)
+    (True, 'equal: expect 1 == 2')
     >>> expect.results
-    [Outcome(passing=False, description='is_equal: expect 1 == 2')]
+    [Outcome(passing=True, description='equal: expect 1 == 2')]
     '''
     def __init__(self):
         self.results = []
@@ -57,14 +57,60 @@ def equal(actual, expected):
     description = "equal: expect {} == {}".format(actual, expected)
     return is_passing, description
 
-def raise_error(actual, expected):
+def raise_error(subject, error_class):
     '''
+    Call function `subject` and expect the function to raise an exception.
     >>> expect = Expector()
-    >>> expect(lambda: 1 / 0).to(raise_error, DivisionByZero)
+    >>> expect(lambda: 1 / 0).to(raise_error, ZeroDivisionError)
+    (True, 'Expect ZeroDivisionError to be raised')
     '''
+    description = 'Expect {} to be raised'.format(error_class.__name__)
+    try:
+        subject()
+        return (False, description)
+    except error_class:
+        return (True, description)
 
-#     >>> expect(lambda: 1 / 0).to(raise_error, DivisionByZero)
-#     >>> d = 0
-#     >>> expect(lambda: d += 0).to_not(change, lambda: d)
-#     >>> expect(lambda: d += 1).to(change, lambda: d, by=1)
-#     >>> expect(lambda: d += 1).to(change, lambda: d, from=0, to=1)
+_NOT_SET = object()
+def change(subject, evaluator, by=_NOT_SET, before=_NOT_SET, after=_NOT_SET):
+    '''
+    Calls function `evaluator` before and after a call function `subject`. Output of `evaluator` should change.
+
+    >>> expect = Expector()
+    >>> a = [1, 2, 3]
+    >>> expect(a.clear).to(change, lambda: len(a))
+    (True, 'expect change: actual before=3 after=0')
+
+    >>> a = [1, 2, 3]
+    >>> expect(a.clear).to(change, lambda: len(a), by=-3)
+    (True, 'expect change by=-3: actual before=3 after=0')
+
+    >>> a = [1, 2, 3]
+    >>> expect(a.clear).to(change, lambda: len(a), before=3, after=0)
+    (True, 'expect change before=3 after=0: actual before=3 after=0')
+    '''
+    output_before = evaluator()
+    subject()
+    output_after = evaluator()
+
+    clauses = []
+    is_passing = output_before != output_after
+
+    if by != _NOT_SET:
+        clauses.append(' by={}'.format(repr(by)))
+        delta = output_after - output_before
+        if delta != by: is_passing = False
+
+    if before != _NOT_SET:
+        clauses.append(' before={}'.format(repr(before)))
+        if before != output_before: is_passing = False
+
+    if after != _NOT_SET:
+        clauses.append(' after={}'.format(repr(after)))
+        if after != output_after: is_passing = False
+
+    return (is_passing, 'expect change{}: actual before={} after={}'.format(
+        ''.join(clauses),
+        repr(output_before),
+        repr(output_after)))
+
