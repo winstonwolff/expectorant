@@ -18,6 +18,29 @@ class _ToClause:
         self.expector.add_result(inverted_is_passing, description)
         return (inverted_is_passing, description)
 
+    def __eq__(self, expected):
+        return (self.actual == expected,
+                '{} == {}'.format(repr(self.actual), repr(expected)))
+
+    def __ne__(self, expected):
+        return (self.actual != expected,
+                '{} != {}'.format(repr(self.actual), repr(expected)))
+
+    def __gt__(self, expected):
+        return (self.actual > expected,
+                '{} > {}'.format(repr(self.actual), repr(expected)))
+
+    def __ge__(self, expected):
+        return (self.actual >= expected,
+                '{} >= {}'.format(repr(self.actual), repr(expected)))
+
+    def __lt__(self, expected):
+        return (self.actual < expected,
+                '{} < {}'.format(repr(self.actual), repr(expected)))
+
+    def __le__(self, expected):
+        return (self.actual <= expected,
+                '{} <= {}'.format(repr(self.actual), repr(expected)))
 
 class Expector:
     '''
@@ -28,6 +51,15 @@ class Expector:
     (True, 'equal: expect 1 == 2')
     >>> expect.results
     [Outcome(passing=True, description='equal: expect 1 == 2')]
+
+    >>> expect(1) == 1
+    (True, '1 == 1')
+
+    >>> expect('abc') != 'def'
+    (True, "'abc' != 'def'")
+
+    >>> expect(1) < 1.1
+    (True, '1 < 1.1')
     '''
     def __init__(self):
         self.results = []
@@ -38,7 +70,6 @@ class Expector:
     def __call__(self, actual):
         '''The first part of the `expect(actual).to(matcher, args)` expression.'''
         return _ToClause(self, actual)
-
 
 
 def equal(actual, expected):
