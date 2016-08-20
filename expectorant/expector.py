@@ -19,28 +19,40 @@ class _ToClause:
         return (inverted_is_passing, description)
 
     def __eq__(self, expected):
-        return (self.actual == expected,
-                '{} == {}'.format(repr(self.actual), repr(expected)))
+        outcome = (self.actual == expected,
+                   '{} == {}'.format(repr(self.actual), repr(expected)))
+        self.expector.add_result(*outcome)
+        return outcome
 
     def __ne__(self, expected):
-        return (self.actual != expected,
-                '{} != {}'.format(repr(self.actual), repr(expected)))
+        outcome = (self.actual != expected,
+                   '{} != {}'.format(repr(self.actual), repr(expected)))
+        self.expector.add_result(*outcome)
+        return outcome
 
     def __gt__(self, expected):
-        return (self.actual > expected,
-                '{} > {}'.format(repr(self.actual), repr(expected)))
+        outcome = (self.actual > expected,
+                   '{} > {}'.format(repr(self.actual), repr(expected)))
+        self.expector.add_result(*outcome)
+        return outcome
 
     def __ge__(self, expected):
-        return (self.actual >= expected,
-                '{} >= {}'.format(repr(self.actual), repr(expected)))
+        outcome = (self.actual >= expected,
+                   '{} >= {}'.format(repr(self.actual), repr(expected)))
+        self.expector.add_result(*outcome)
+        return outcome
 
     def __lt__(self, expected):
-        return (self.actual < expected,
-                '{} < {}'.format(repr(self.actual), repr(expected)))
+        outcome = (self.actual < expected,
+                   '{} < {}'.format(repr(self.actual), repr(expected)))
+        self.expector.add_result(*outcome)
+        return outcome
 
     def __le__(self, expected):
-        return (self.actual <= expected,
-                '{} <= {}'.format(repr(self.actual), repr(expected)))
+        outcome = (self.actual <= expected,
+                   '{} <= {}'.format(repr(self.actual), repr(expected)))
+        self.expector.add_result(*outcome)
+        return outcome
 
 class Expector:
     '''

@@ -37,7 +37,7 @@ def _():
 
             @it("has 10 units of syrup")
             def _(scope, expect):
-                expect(scope.soda_fountain.syrup).to(equal, 10)
+                expect(scope.soda_fountain.syrup) == 10
 
             @it("has 0 syrup when pouring 99")
             def _(scope, expect):
