@@ -57,7 +57,13 @@ def equal(actual, expected):
     description = "equal: expect {} == {}".format(actual, expected)
     return is_passing, description
 
-#     >>> expect(lambda: 1 / 0).to(raise_error(DivisionByZero))
+def raise_error(actual, expected):
+    '''
+    >>> expect = Expector()
+    >>> expect(lambda: 1 / 0).to(raise_error, DivisionByZero)
+    '''
+
+#     >>> expect(lambda: 1 / 0).to(raise_error, DivisionByZero)
 #     >>> d = 0
 #     >>> expect(lambda: d += 0).to_not(change, lambda: d)
 #     >>> expect(lambda: d += 1).to(change, lambda: d, by=1)
