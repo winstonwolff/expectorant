@@ -3,7 +3,7 @@ RSpec for Python
 
 A simple example
 
-```
+```python
 from expectorant import *
 
 @describe("expectorant")
