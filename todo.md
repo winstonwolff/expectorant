@@ -3,16 +3,31 @@
 
 ## To Do
 
-- write tests in Expectorant itself!
-
 - use codec hack to hide `def _():`
 
 - executable to run specs from command line.
+
+- parameterized specs, e.g.
+
+    for input, output in [(1, 1), (2, 4)]:
+        @it("raises input with itself:", input, output)
+        def _(scope, expect):
+            expect(input ** input) == output
+    ---
+        @it("raises input with itself:", input, output):
+            expect(input ** input) == output
+    ---
+    raises input with itself: 1, 1
+        1 == 1
+    raises input with itself: 2, 4
+        4 == 4
 
 - alternative to 'scope'
 
 - improve output descriptions
     - get line of source?
+
+- `expect() == ...` should use same function as `expect().to(equal,...)`
 
 - documentation
     - matchers
@@ -20,6 +35,7 @@
     - expect() does not raise so several are OK in an 'it' block
     - show what output looks like
     - easy to output different formats like JUnit xml
+    - codec version
 
 - user can run a subset of specs
 
@@ -44,4 +60,5 @@
 - proper test loader
 - write in RSpec describe-context-it format
 - decouple testing from reporting
+- write tests in Expectorant itself!
 
