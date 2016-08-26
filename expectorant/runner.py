@@ -9,11 +9,11 @@ from . import ansi
 from . import expector
 
 def find_files(args):
-    files_or_dirs = args or ['specs/']
+    files_or_dirs = args or ['.']
     filenames = []
     for f in files_or_dirs:
         if path.isdir(f):
-            filenames.extend(glob.glob(path.join(f, '*_spec.py')))
+            filenames.extend(glob.glob(path.join(f, '**', '*_spec.py'), recursive=True))
         elif path.isfile(f):
             filenames.append(f)
         else:

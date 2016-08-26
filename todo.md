@@ -1,3 +1,13 @@
+## Test the package
+
+    mkdir /tmp/ex
+    cd /tmp/ex
+    pyenv shell 3.5.1
+    pip3 install --target . git+git://github.com/winstonwolff/expectorant.git
+
+
+
+
 ## Working on
 
 

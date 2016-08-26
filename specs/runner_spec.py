@@ -11,7 +11,7 @@ def _():
         @it('returns fileenames in spec/ when args=[]')
         def _(scope, expect):
             args = []
-            expect(runner.find_files(args)) == glob.glob('specs/*_spec.py')
+            expect(runner.find_files(args)) == glob.glob('./**/*_spec.py', recursive=True)
 
         @it('passes args through when args are filenames')
         def _(scope, expect):
