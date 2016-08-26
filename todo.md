@@ -5,8 +5,6 @@
 
 - use codec hack to hide `def _():`
 
-- executable to run specs from command line.
-
 - parameterized specs, e.g.
 
     for input, output in [(1, 1), (2, 4)]:
@@ -51,6 +49,7 @@
 
 
 ## Done
+- executable to run specs from command line.
 - better expect() syntax
 - allow users to write new test functions easily
 - check for side-effects to change
