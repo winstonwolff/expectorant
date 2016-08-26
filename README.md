@@ -24,10 +24,20 @@ def _():                                                    # after, and it, jus
 ```
 See the examples directory, e.g. [sample_spec.py](examples/sample_spec.py)
 
+Assuming your spec files are in the `specs` directory, you can run all specs with:
 
-Let me know your thoughts--is this insane, am I missing an important use-case, what would be a nicer way to write tests?
+```python3 -m expectorant```
 
-Also, if you or your child wants to learn electricity, try my game Electropocalyse at http://stratolab.com/electropocalypse
+
+Let me know your thoughts--is this insane, am I missing an important use-case,
+what would be a nicer way to write tests?  In particular, I'd like how the only
+shared global is this library is the list of test functions. I.e. `scope` and
+`expect` are not globals but are passed in to the tests as they are run.
+However it is tedious to write them for each @before and @it clause. Is there
+another way to do this?
+
+Also, if you or your child wants to learn electricity, try my game
+Electropocalyse at http://stratolab.com/electropocalypse
 
 Requirements
 ------------

@@ -22,6 +22,8 @@
 
 - alternative to 'scope'
 
+- have runner run doctests too?
+
 - improve output descriptions
     - get line of source?
 
