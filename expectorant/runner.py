@@ -1,12 +1,14 @@
 import importlib.util
 from pathlib import Path
+import glob
+import argparse
 
 from . import spec
 from . import ansi
 from . import expector
 
 
-def load_tests(files):
+def load_specs(files):
     for filename in files:
         import_spec(filename)
 
@@ -18,7 +20,7 @@ def import_spec(filename):
     m = importlib.util.module_from_spec(import_spec)
     import_spec.loader.exec_module(m)
 
-def run_tests(suite):
+def run_specs(suite):
     for node in suite.nodes():
         print("  " * node.depth(), node.name, sep="")
         if node.is_test():
@@ -28,3 +30,7 @@ def run_tests(suite):
                 color = ansi.GREEN if result.passing else ansi.RED
                 print(color, "  " * (node.depth() + 1), result.description, ansi.RESET, sep="")
 
+def main():
+    files = glob.glob('specs/*_spec.py')
+    suite = load_specs(files)
+    run_specs(suite)

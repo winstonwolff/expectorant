@@ -4,5 +4,5 @@ import expectorant
 
 if __name__=='__main__':
     files = glob.glob('examples/*_spec.py')
-    test_tree = expectorant.load_tests(files)
-    expectorant.run_tests(test_tree)
+    suite = expectorant.load_specs(files)
+    expectorant.run_specs(suite)
