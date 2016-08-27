@@ -13,15 +13,11 @@
 
 ## To Do
 
-- alternative to 'scope'
-
-- get 'expect' out of 'def _():'
+- have runner run doctests too? With nicer colored output?
 
 - separate TreeNode from Spec
 
 - use codec hack to hide `def _():`
-
-- have runner run doctests too? With nicer colored output?
 
 - improve output descriptions
     - get line of source?
@@ -50,6 +46,8 @@
 
 
 ## Done
+- alternative to 'scope'
+- get 'expect' out of 'def _():'
 - parameterized specs
 - executable to run specs from command line.
 - better expect() syntax

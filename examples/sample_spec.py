@@ -17,16 +17,21 @@ from expectorant import *
 
 @describe("SodaFountain")
 def _():
+    scope = None
+    @before
+    def _():
+        nonlocal scope
+        scope = Scope
 
     @context("pour()")
     def _():
 
         @before
-        def _(scope):
+        def _():
             scope.soda_fountain = SodaFountain()
 
         @after
-        def _(scope):
+        def _():
             scope.soda_fountain.shutdown()
 
         def subject(soda_fountain, val):
@@ -36,11 +41,11 @@ def _():
         def _():
 
             @it("has 10 units of syrup")
-            def _(scope):
+            def _():
                 expect(scope.soda_fountain.syrup) == 10
 
             @it("has 0 syrup when pouring 99 (this fails)")
-            def _(scope):
+            def _():
                 subject(scope.soda_fountain, 99)
                 expect(scope.soda_fountain.syrup).to(equal, 0)
 
@@ -49,21 +54,21 @@ def _():
         def _():
 
             @before
-            def _(scope):
+            def _():
                 scope.soda_fountain.pour(1)
 
             @it("pouring another leaves 8 left")
-            def _(scope):
+            def _():
                 subject(scope.soda_fountain, 1)
                 expect(scope.soda_fountain.syrup).to(equal, 8)
 
             @it("pouring 5 leaves 4 left")
-            def _(scope):
+            def _():
                 subject(scope.soda_fountain, 5)
                 expect(scope.soda_fountain.syrup).to(equal, 4)
 
             @it("when pouring {} more, remaining is {}", repeat=[(0, 9), (3, 6), (9, 0)])
-            def _(scope, pour, remaining):
+            def _(pour, remaining):
                 subject(scope.soda_fountain, pour)
                 expect(scope.soda_fountain.syrup) == remaining
 

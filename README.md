@@ -8,17 +8,19 @@ from expectorant import *
 
 @describe("expectorant")                                    # describe, context, before,
 def _():                                                    # after, and it, just like RSpec
-
+    scope = None
     @before
-    def _(scope):                                   # 'scope' is for holding values
-        scope.dict = {"a": 1}                               # from before to it clauses.
+    def _():
+        nonlocal scope                                      # `scope` is for holding values
+        scope = Scope()                                     # from `before` to `it` clauses.
+        scope.dict = {"a": 1}
 
     @it("supports expectations with == != < etc. operators")
-    def _(scope):
-        expect(scope.dict["a"]) == 1                        # expectations are similar to RSpec
+    def _():
+        expect(.dict["a"]) == 1                             # expectations are similar to RSpec
 
     @it("supports expectations on raising exceptions")
-    def _(scope):
+    def _():
         def subject(): scope.dict["x"]                      # change and raise_error matchers take functions
         expect(subject).to(raise_error, KeyError)
 ```

@@ -9,6 +9,10 @@ from . import ansi
 from . import expector
 from . import singletons
 
+class Scope:
+    '''A place for specs to store values during the test run.'''
+    pass
+
 def find_files(args):
     '''
     Return list of spec files. `args` may be filenames which are passed right

@@ -9,21 +9,21 @@ def _():
     def _():
 
         @it('returns fileenames in spec/ when args=[]')
-        def _(scope):
+        def _():
             args = []
             expect(runner.find_files(args)) == glob.glob('./**/*_spec.py', recursive=True)
 
         @it('passes args through when args are filenames')
-        def _(scope):
+        def _():
             args = ['specs/runner_spec.py']
             expect(runner.find_files(args)) == ['specs/runner_spec.py']
 
         @it('returns all spec filenames when args is directory')
-        def _(scope):
+        def _():
             args = ['specs']
             expect(runner.find_files(args)) == glob.glob('specs/*_spec.py')
 
         @it('throws error when args has filename that doesnt exist')
-        def _(scope):
+        def _():
             args = ['non_existent.file']
             expect(lambda: runner.find_files(args)).to(raise_error, FileNotFoundError)

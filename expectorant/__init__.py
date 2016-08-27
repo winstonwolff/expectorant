@@ -4,7 +4,7 @@ from . import singletons
 
 from .expector import * # all the matchers
 
-from .runner import load_specs, run_specs, main
+from .runner import load_specs, run_specs, main, Scope
 
 #
 # Use these global functions for syntactic sugar
