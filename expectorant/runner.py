@@ -9,6 +9,11 @@ from . import ansi
 from . import expector
 
 def find_files(args):
+    '''
+    Return list of spec files. `args` may be filenames which are passed right
+    through, or directories in which case they are searched recursively for
+    *._spec.py
+    '''
     files_or_dirs = args or ['.']
     filenames = []
     for f in files_or_dirs:
@@ -22,6 +27,9 @@ def find_files(args):
 
 
 def load_specs(filenames):
+    '''
+    Return Suite of specs, built up from `filenames`
+    '''
     for filename in filenames:
         import_spec(filename)
 

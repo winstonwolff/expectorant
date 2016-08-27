@@ -56,7 +56,7 @@ class _ToClause:
 
 class Expector:
     '''
-    Checks things and keeps a tally of the results.
+    Checks things and keeps a tally of the results. An expectation inspector = expector.
 
     >>> expect = Expector()
     >>> expect(1).to_not(equal, 2)
@@ -115,22 +115,22 @@ def raise_error(subject, error_class):
         return (True, description)
 
 _NOT_SET = object()
-def change(subject, evaluator, by=_NOT_SET, before=_NOT_SET, after=_NOT_SET):
+def change(subject, evaluator, by=_NOT_SET, frm=_NOT_SET, to=_NOT_SET):
     '''
     Calls function `evaluator` before and after a call function `subject`. Output of `evaluator` should change.
 
     >>> expect = Expector()
     >>> a = [1, 2, 3]
     >>> expect(a.clear).to(change, lambda: len(a))
-    (True, 'expect change: actual before=3 after=0')
+    (True, 'expect change: actual from=3 to=0')
 
     >>> a = [1, 2, 3]
     >>> expect(a.clear).to(change, lambda: len(a), by=-3)
-    (True, 'expect change by=-3: actual before=3 after=0')
+    (True, 'expect change by=-3: actual from=3 to=0')
 
     >>> a = [1, 2, 3]
-    >>> expect(a.clear).to(change, lambda: len(a), before=3, after=0)
-    (True, 'expect change before=3 after=0: actual before=3 after=0')
+    >>> expect(a.clear).to(change, lambda: len(a), frm=3, to=0)
+    (True, 'expect change from=3 to=0: actual from=3 to=0')
     '''
     output_before = evaluator()
     subject()
@@ -144,16 +144,26 @@ def change(subject, evaluator, by=_NOT_SET, before=_NOT_SET, after=_NOT_SET):
         delta = output_after - output_before
         if delta != by: is_passing = False
 
-    if before != _NOT_SET:
-        clauses.append(' before={}'.format(repr(before)))
-        if before != output_before: is_passing = False
+    if frm != _NOT_SET:
+        clauses.append(' from={}'.format(repr(frm)))
+        if frm != output_before: is_passing = False
 
-    if after != _NOT_SET:
-        clauses.append(' after={}'.format(repr(after)))
-        if after != output_after: is_passing = False
+    if to != _NOT_SET:
+        clauses.append(' to={}'.format(repr(to)))
+        if to != output_after: is_passing = False
 
-    return (is_passing, 'expect change{}: actual before={} after={}'.format(
+    return (is_passing, 'expect change{}: actual from={} to={}'.format(
         ''.join(clauses),
         repr(output_before),
         repr(output_after)))
+
+def startswith(a, b):
+        is_passing = a.startswith(b)
+        description = 'Expect {} to start with {}'.format(repr(a), repr(b))
+        return (is_passing, description)
+
+def contain(a, b):
+        is_passing = b in a
+        description = 'Expect {} to contain {}'.format(repr(a), repr(b))
+        return (is_passing, description)
 

@@ -2,16 +2,6 @@ from expectorant import *
 
 from expectorant.spec import TestCase
 
-def startswith(a, b):
-        is_passing = a.startswith(b)
-        description = 'Expect {} to start with {}'.format(repr(a), repr(b))
-        return (is_passing, description)
-
-def contain(a, b):
-        is_passing = b in a
-        description = 'Expect {} to contain {}'.format(repr(a), repr(b))
-        return (is_passing, description)
-
 @describe("TestCase")
 def _():
 
