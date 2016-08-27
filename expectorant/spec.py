@@ -210,13 +210,4 @@ class Suite:
     def after(self, func):
         self.current_container().after = func
 
-#
-# Use these global functions for syntactic sugar
-#
 global_suite = Suite()
-context  = global_suite.context
-describe = global_suite.describe
-it       = global_suite.it
-before   = global_suite.before
-after    = global_suite.after
-
