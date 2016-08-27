@@ -36,13 +36,13 @@ class TestCase(Node):
         super().__init__(containers)
         self.test_func = test_func
         self.args = args if args is not None else ()
-        self.name = name.format(*self.args)
+        self.name = self._format(name, self.args)
 
     def _format(self, name, args):
-        if not args:
-            return name
-        else:
+        try:
             return name.format(*args)
+        except:
+            return name + ' -- Warning: could not format this repeating description with args: {})'.format(repr(args))
 
 
     def is_container(self): return False
