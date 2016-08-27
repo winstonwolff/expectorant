@@ -30,7 +30,6 @@ class TestCase(Node):
         >>> tc = TestCase([], "I am a test case", the_test_case)
         >>> tc.run(None)
         the_test_case ran
-
     '''
     def __init__(self, containers, name, test_func, args=None):
         super().__init__(containers)
@@ -130,49 +129,94 @@ class Suite:
         for root in self.stack:
             print_node(root)
 
-_suite = Suite()
+    def context(self, message):
+        '''
+        Function decorator which adds "context" around a group of TestCases and may have
+        a `before` and `after` func.
 
-def context(message):
-    def decorator(func):
-        _suite.push_container(message)
-        func()
-        _suite.pop_container()
-    return decorator
+            >>> s = Suite()
+            >>> @s.context('context 1')
+            ... def _():
+            ...     @s.before
+            ...     def _(scope, expect): print('before 1 called.')
+            ...     @s.it('runs a test')
+            ...     def _(scope, expect): print('test case 1 called.')
+            >>> @s.context('context 2')
+            ... def _():
+            ...     @s.before
+            ...     def _(scope, expect): print('before 2 called.')
+            ...     @s.it('runs a test')
+            ...     def _(scope, expect): print('test case 2 called.')
+            >>> tc1 = list(s.nodes())[2]
+            >>> tc1.run(None)
+            before 1 called.
+            test case 1 called.
+            >>> tc1 = list(s.nodes())[4]
+            >>> tc1.run(None)
+            before 2 called.
+            test case 2 called.
+        '''
+        def decorator(context_func):
+            self.push_container(message)
+            context_func()
+            self.pop_container()
+        return decorator
 
-describe = context
+    describe = context  # synonym
 
-def it(message, repeat=None):
-    '''
-        #>>> _suite = Suite()
-        #>>> @it("I am a test case")
-        #... def _(scope, expect): print('Test case ran')
-        #>>> for node in _suite.nodes(): print(node)
-        #...     if node.is_test(): node.run(None)
-        #Test case ran
-    '''
-#     You can repeat the test with raw data:
+    def it(self, message, repeat=None):
+        '''
+        Function decorator which adds a TestCase to the Suite
 
-#         >>> _suite = Suite()
-#         >>> @it("I am a test case", repeat=[(1, 2), (3, 4)])
-#         ... def _(scope, expect, alpha, beta):
-#         ...    print('Ran with alpha=', alpha, 'beta=', beta)
-#         ...
-#         >>> for node in _suite.nodes():
-#         ...     if node.is_test(): node.run(None)
-#         Ran with alpha= 1 beta= 2
-#         Ran with alpha= 3 beta= 4
-#     '''
-    def decorator(func):
-        if repeat:
-            for set_of_args in repeat:
-                _suite.add_test(message, func, set_of_args)
-        else:
-            _suite.add_test(message, func)
-    return decorator
+            >>> s = Suite()
+            >>> @s.it('always passes')
+            ... def _(): pass
+            >>> list(s.nodes())
+            [<Container: root>, <TestCase:  always passes>]
 
-def before(func):
-    _suite.current_container().before = func
 
-def after(func):
-    _suite.current_container().after = func
+        `repeat` will add multiple test cases with extra parameters.
+
+            >>> s = Suite()
+            >>> @s.it('a={} b={}', repeat=[(1, 2), (3, 4)])
+            ... def _(a, b): pass
+            >>> list(s.nodes())
+            [<Container: root>, <TestCase:  a=1 b=2>, <TestCase:  a=3 b=4>]
+        '''
+        def decorator(test_func):
+            if repeat:
+                for set_of_args in repeat:
+                    self.add_test(message, test_func, set_of_args)
+            else:
+                self.add_test(message, test_func)
+        return decorator
+
+    def before(self, func):
+        '''
+        Function decorator which causes `func` to be run before the test case.
+
+            >>> s = Suite()
+            >>> @s.before
+            ... def _(scope, expect): print('before called.')
+            >>> @s.it('the test case')
+            ... def _(scope, expect): print('test case called.')
+            >>> tc = list(s.nodes())[1]
+            >>> tc.run(None)
+            before called.
+            test case called.
+        '''
+        self.current_container().before = func
+
+    def after(self, func):
+        self.current_container().after = func
+
+#
+# Use these global functions for syntactic sugar
+#
+global_suite = Suite()
+context  = global_suite.context
+describe = global_suite.describe
+it       = global_suite.it
+before   = global_suite.before
+after    = global_suite.after
 

@@ -25,7 +25,7 @@ def load_specs(filenames):
     for filename in filenames:
         import_spec(filename)
 
-    return spec._suite
+    return spec.global_suite
 
 def import_spec(filename):
     stem = Path(filename).stem

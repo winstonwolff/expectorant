@@ -13,28 +13,15 @@
 
 ## To Do
 
-- use codec hack to hide `def _():`
-
-- parameterized specs, e.g.
-
-    for input, output in [(1, 1), (2, 4)]:
-        @it("raises input with itself:", input, output)
-        def _(scope, expect):
-            expect(input ** input) == output
-    ---
-        @it("raises input with itself:", input, output):
-            expect(input ** input) == output
-    ---
-    raises input with itself: 1, 1
-        1 == 1
-    raises input with itself: 2, 4
-        4 == 4
-
 - alternative to 'scope'
 
 - get 'expect' out of 'def _():'
 
-- have runner run doctests too?
+- separate TreeNode from Spec
+
+- use codec hack to hide `def _():`
+
+- have runner run doctests too? With nicer colored output?
 
 - improve output descriptions
     - get line of source?
@@ -63,6 +50,7 @@
 
 
 ## Done
+- parameterized specs
 - executable to run specs from command line.
 - better expect() syntax
 - allow users to write new test functions easily
