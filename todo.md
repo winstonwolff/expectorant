@@ -32,6 +32,8 @@
 
 - alternative to 'scope'
 
+- get 'expect' out of 'def _():'
+
 - have runner run doctests too?
 
 - improve output descriptions

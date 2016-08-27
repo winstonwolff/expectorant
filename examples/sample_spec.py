@@ -62,3 +62,8 @@ def _():
                 subject(scope.soda_fountain, 5)
                 expect(scope.soda_fountain.syrup).to(equal, 4)
 
+            @it("when pouring {} more, remaining is {}", repeat=[(0, 9), (3, 6), (9, 0)])
+            def _(scope, expect, pour, remaining):
+                subject(scope.soda_fountain, pour)
+                expect(scope.soda_fountain.syrup) == remaining
+
