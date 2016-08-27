@@ -26,9 +26,9 @@ class TestCase(Node):
     test_func = function that executes the test.
     args = Optional extra parameters that are passed to the test function. See example
 
-        >>> def the_test_case(scope, expect): print('the_test_case ran')
+        >>> def the_test_case(scope): print('the_test_case ran')
         >>> tc = TestCase([], "I am a test case", the_test_case)
-        >>> tc.run(None)
+        >>> tc.run()
         the_test_case ran
     '''
     def __init__(self, containers, name, test_func, args=None):
@@ -51,21 +51,21 @@ class TestCase(Node):
     def __repr__(self):
         return "<TestCase:  {}>".format(self.name)
 
-    def run(self, expector):
+    def run(self):
         scope = Scope()
 
         # run before funcs
         for c in self.containers:
             assert isinstance(c, Container)
-            if c.before: c.before(scope, expector)
+            if c.before: c.before(scope)
 
         # run the test itself
-        self.test_func(scope, expector, *self.args)
+        self.test_func(scope, *self.args)
 
         # run after funcs
         for c in reversed(self.containers):
             assert isinstance(c, Container)
-            if c.after: c.after(scope, expector)
+            if c.after: c.after(scope)
 
 
 class Container(Node):
@@ -138,21 +138,21 @@ class Suite:
             >>> @s.context('context 1')
             ... def _():
             ...     @s.before
-            ...     def _(scope, expect): print('before 1 called.')
+            ...     def _(scope): print('before 1 called.')
             ...     @s.it('runs a test')
-            ...     def _(scope, expect): print('test case 1 called.')
+            ...     def _(scope): print('test case 1 called.')
             >>> @s.context('context 2')
             ... def _():
             ...     @s.before
-            ...     def _(scope, expect): print('before 2 called.')
+            ...     def _(scope): print('before 2 called.')
             ...     @s.it('runs a test')
-            ...     def _(scope, expect): print('test case 2 called.')
+            ...     def _(scope): print('test case 2 called.')
             >>> tc1 = list(s.nodes())[2]
-            >>> tc1.run(None)
+            >>> tc1.run()
             before 1 called.
             test case 1 called.
             >>> tc1 = list(s.nodes())[4]
-            >>> tc1.run(None)
+            >>> tc1.run()
             before 2 called.
             test case 2 called.
         '''
@@ -197,11 +197,11 @@ class Suite:
 
             >>> s = Suite()
             >>> @s.before
-            ... def _(scope, expect): print('before called.')
+            ... def _(scope): print('before called.')
             >>> @s.it('the test case')
-            ... def _(scope, expect): print('test case called.')
+            ... def _(scope): print('test case called.')
             >>> tc = list(s.nodes())[1]
-            >>> tc.run(None)
+            >>> tc.run()
             before called.
             test case called.
         '''

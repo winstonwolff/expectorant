@@ -10,15 +10,15 @@ from expectorant import *
 def _():                                                    # after, and it, just like RSpec
 
     @before
-    def _(scope, expect):                                   # 'scope' is for holding values
+    def _(scope):                                   # 'scope' is for holding values
         scope.dict = {"a": 1}                               # from before to it clauses.
 
     @it("supports expectations with == != < etc. operators")
-    def _(scope, expect):
+    def _(scope):
         expect(scope.dict["a"]) == 1                        # expectations are similar to RSpec
 
     @it("supports expectations on raising exceptions")
-    def _(scope, expect):
+    def _(scope):
         def subject(): scope.dict["x"]                      # change and raise_error matchers take functions
         expect(subject).to(raise_error, KeyError)
 ```

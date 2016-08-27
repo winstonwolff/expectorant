@@ -14,3 +14,5 @@ it       = spec.global_suite.it
 before   = spec.global_suite.before
 after    = spec.global_suite.after
 
+expect = Expector(global_outcomes)
+

@@ -1,6 +1,8 @@
 from collections import namedtuple
 
-_Outcome = namedtuple("Outcome", 'passing description')
+Outcome = namedtuple("Outcome", 'passing description')
+
+global_outcomes = []
 
 class _ToClause:
     def __init__(self, expector, actual):
@@ -58,10 +60,11 @@ class Expector:
     '''
     Checks things and keeps a tally of the results. An expectation inspector = expector.
 
-    >>> expect = Expector()
+    >>> outcomes = []
+    >>> expect = Expector(outcomes)
     >>> expect(1).to_not(equal, 2)
     (True, 'equal: expect 1 == 2')
-    >>> expect.results
+    >>> outcomes
     [Outcome(passing=True, description='equal: expect 1 == 2')]
 
     >>> expect(1) == 1
@@ -73,11 +76,11 @@ class Expector:
     >>> expect(1) < 1.1
     (True, '1 < 1.1')
     '''
-    def __init__(self):
-        self.results = []
+    def __init__(self, outcomes):
+        self.results = outcomes
 
     def add_result(self, is_passing, description):
-        self.results.append(_Outcome(is_passing, description))
+        self.results.append(Outcome(is_passing, description))
 
     def __call__(self, actual):
         '''The first part of the `expect(actual).to(matcher, args)` expression.'''
@@ -88,7 +91,7 @@ def equal(actual, expected):
     '''
     Compare actual and expected using ==
 
-    >>> expect = Expector()
+    >>> expect = Expector([])
     >>> expect(1).to_not(equal, 2)
     (True, 'equal: expect 1 == 2')
 
@@ -103,7 +106,7 @@ def equal(actual, expected):
 def raise_error(subject, error_class):
     '''
     Call function `subject` and expect the function to raise an exception.
-    >>> expect = Expector()
+    >>> expect = Expector([])
     >>> expect(lambda: 1 / 0).to(raise_error, ZeroDivisionError)
     (True, 'Expect ZeroDivisionError to be raised')
     '''
@@ -119,7 +122,7 @@ def change(subject, evaluator, by=_NOT_SET, frm=_NOT_SET, to=_NOT_SET):
     '''
     Calls function `evaluator` before and after a call function `subject`. Output of `evaluator` should change.
 
-    >>> expect = Expector()
+    >>> expect = Expector([])
     >>> a = [1, 2, 3]
     >>> expect(a.clear).to(change, lambda: len(a))
     (True, 'expect change: actual from=3 to=0')
