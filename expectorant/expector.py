@@ -2,7 +2,6 @@ from collections import namedtuple
 
 Outcome = namedtuple("Outcome", 'passing description')
 
-global_outcomes = []
 
 class _ToClause:
     def __init__(self, expector, actual):

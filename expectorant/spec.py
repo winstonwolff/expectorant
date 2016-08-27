@@ -210,4 +210,3 @@ class Suite:
     def after(self, func):
         self.current_container().after = func
 
-global_suite = Suite()

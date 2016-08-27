@@ -7,6 +7,7 @@ from os import path
 from . import spec
 from . import ansi
 from . import expector
+from . import singletons
 
 def find_files(args):
     '''
@@ -33,7 +34,7 @@ def load_specs(filenames):
     for filename in filenames:
         import_spec(filename)
 
-    return spec.global_suite
+    return singletons.global_suite
 
 def import_spec(filename):
     stem = Path(filename).stem
@@ -41,7 +42,7 @@ def import_spec(filename):
     m = importlib.util.module_from_spec(import_spec)
     import_spec.loader.exec_module(m)
 
-def run_specs(suite, outcomes=expector.global_outcomes):
+def run_specs(suite, outcomes=singletons.global_outcomes):
     for node in suite.nodes():
         print("  " * node.depth(), node.name, sep="")
         if node.is_test():
