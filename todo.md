@@ -9,6 +9,8 @@
 
 - Publish on PyPi
 
+    python setup.py sdist upload -r pypitest
+
 
 ## To Do
 
