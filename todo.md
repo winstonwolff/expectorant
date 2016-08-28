@@ -5,23 +5,27 @@
     pyenv shell 3.5.1
     pip3 install --target . git+git://github.com/winstonwolff/expectorant.git
 
-
-
-
 ## Working on
+
+- Publish on PyPi
 
 
 ## To Do
 
-- have runner run doctests too? With nicer colored output?
-
-- documentation
-    - matchers
-    - easy to write new matchers -- two line function
+- write documentation
+    - How does this compare with other RSpec clones?
+        - https://github.com/nestorsalceda/mamba
+        - NoseOfYeti
+        - pspec
+    - What matchers are available?  How do they work?
+    - How do I run my specs? All? Just a few?
+    - How do I repeat an `it` test with different data?
+    - How do I write a new matcher?
+    - How many `expect`s should I put in one `it`?
     - expect() does not raise so several are OK in an 'it' block
-    - show what output looks like
     - easy to output different formats like JUnit xml
-    - codec version
+
+- publish docs on ReadTheDocs
 
 - user can run a subset of specs
 
@@ -31,6 +35,8 @@
         - inside setup
         - inside teardown
         - inside testing framework
+
+- have runner run doctests too? With nicer colored output?
 
 - extract TreeNode from Spec
 
