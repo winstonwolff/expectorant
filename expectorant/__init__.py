@@ -1,3 +1,6 @@
+import sys as _sys
+if _sys.version_info < (3,5):
+    raise RuntimeError('expectorant requires Python 3.5 or higher but the current vesion is: {}.{}'.format(_sys.version_info.major, _sys.version_info.minor))
 
 from . import spec
 from . import singletons
