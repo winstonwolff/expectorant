@@ -8,7 +8,7 @@ def _():
     @describe('find_files()')
     def _():
 
-        @it('returns fileenames in spec/ when args=[]')
+        @it('returns *_spec.py files in current directory when args=[]')
         def _():
             args = []
             expect(runner.find_files(args)) == glob.glob('./**/*_spec.py', recursive=True)
@@ -23,7 +23,7 @@ def _():
             args = ['specs']
             expect(runner.find_files(args)) == glob.glob('specs/*_spec.py')
 
-        @it('throws error when args has filename that doesnt exist')
+        @it('raises error when args has filename that doesnt exist')
         def _():
             args = ['non_existent.file']
             expect(lambda: runner.find_files(args)).to(raise_error, FileNotFoundError)
