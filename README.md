@@ -1,8 +1,8 @@
 Expectorant - RSpec for Python
 ==============================
 
-A testing framework for Python 3.5 or later in the style of Ruby's Rspec.  Here
-the prominent features:
+A testing framework for Python 3.5 or later in the style of Ruby's RSpec.  Here
+are the prominent features:
 
 * __Readable code__ --- Expectorant's syntax is easier to read than `unittest` and
   descriptions of intent are more prominent.  No more functions named `test_my_function_with_special_condition_x`
@@ -25,7 +25,7 @@ the prominent features:
 * __Simple custom matchers__ --- Matcher functions to compare you specific data types
   are only a few lines long.
 
-* __A failing check does not abort the test__ --- `unittest` and Rspec use
+* __A failing check does not abort the test__ --- `unittest` and RSpec use
   assertions to signal a failure. Expectorant does not which means one test
   case can check several outputs and can show several failures.  This was an
   intentional part of Unittest's design---you don't want side effects from one
@@ -43,8 +43,8 @@ A simple example of Expectorant style test:
 ```python
 from expectorant import *
 
-@describe('expectorant')                                    # describe, context, before,
-def _():                                                    # after, and it, just like RSpec
+@describe('expectorant')                                    # what is being specified in this file?
+def _():                                                    # this line is a bit ugly but not too bad.
     scope = None
     @before
     def _():
@@ -54,8 +54,8 @@ def _():                                                    # after, and it, jus
 
     @it('supports "expect" syntax similar to rspec')
     def _():
-        expect(scope.dict['a']).to(contain, 'rspec')        # expectations are similar to RSpec
-
+        expect(scope.dict['a']).to(contain, 'rspec')        # expectations are similar to RSpec.
+                                                            # `contain` is just a matcher function.
     @it('expectations with == != < etc. operators are convenient syntactic sugar')
     def _():
         expect(scope.dict['b']) == 3
