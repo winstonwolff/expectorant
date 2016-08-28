@@ -15,15 +15,6 @@
 
 - have runner run doctests too? With nicer colored output?
 
-- separate TreeNode from Spec
-
-- use codec hack to hide `def _():`
-
-- improve output descriptions
-    - get line of source?
-
-- `expect() == ...` should use same function as `expect().to(equal,...)`
-
 - documentation
     - matchers
     - easy to write new matchers -- two line function
@@ -40,6 +31,15 @@
         - inside setup
         - inside teardown
         - inside testing framework
+
+- extract TreeNode from Spec
+
+- use codec hack to hide `def _():`
+
+- improve output descriptions
+    - get line of source?
+
+- `expect() == ...` should use same function as `expect().to(equal,...)`
 
 - async specs
 
