@@ -1,4 +1,7 @@
 from distutils.core import setup
+
+VERSION = '0.3'
+
 setup(
     name = 'expectorant',
     packages = ['expectorant'],
@@ -7,8 +10,8 @@ setup(
     author_email = 'winston@nitidbit.com',
     url = 'https://github.com/winstonwolff/expectorant',
 
-    version = '0.2',
-    download_url = 'https://github.com/winstonwolff/expectorant/tarball/0.2',
+    version = VERSION,
+    download_url = 'https://github.com/winstonwolff/expectorant/tarball/{}'.format(VERSION),
 
     keywords = ['testing', 'rspec', 'tdd'],
     entry_points = { 'console_scripts': [ 'expectorant=expectorant.runner:main' ] },
