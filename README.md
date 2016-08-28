@@ -6,30 +6,39 @@ A simple example
 ```python
 from expectorant import *
 
-@describe("expectorant")                                    # describe, context, before,
+@describe('expectorant')                                    # describe, context, before,
 def _():                                                    # after, and it, just like RSpec
     scope = None
     @before
     def _():
-        nonlocal scope                                      # `scope` is for holding values
-        scope = Scope()                                     # from `before` to `it` clauses.
-        scope.dict = {"a": 1}
+        nonlocal scope
+        scope = Scope()                                     # A new scope every test run
+        scope.dict = {'a': 'expectorant is like rspec', 'b': 3}
 
-    @it("supports expectations with == != < etc. operators")
+    @it('supports "expect" syntax similar to rspec')
     def _():
-        expect(.dict["a"]) == 1                             # expectations are similar to RSpec
+        expect(scope.dict['a']).to(contain, 'rspec')        # expectations are similar to RSpec
 
-    @it("supports expectations on raising exceptions")
+    @it('expectations with == != < etc. operators are convenient syntactic sugar')
     def _():
-        def subject(): scope.dict["x"]                      # change and raise_error matchers take functions
-        expect(subject).to(raise_error, KeyError)
+        expect(scope.dict['b']) == 3
+
+    @it('supports rspec\'s great "change" expectation')
+    def _():
+        expect(scope.dict.clear).to(change, lambda: len(scope.dict), frm=2, to=0)
 ```
-See the examples directory, e.g. [sample_spec.py](examples/sample_spec.py)
 
-Assuming your spec files are in the `specs` directory, you can run all specs with:
+Run all your specs from the command line or from a python script
+```
+expectorant [filename | directory]
+```
 
-```python3 -m expectorant```
+```python
+import expectorant
+expectorant.main()
+```
 
+<img src="./docs/simple_spec.png" width=537 height=139 />
 
 Let me know your thoughts--is this insane, am I missing an important use-case,
 what would be a nicer way to write tests?  In particular, I'd like how the only
