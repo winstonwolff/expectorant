@@ -88,6 +88,6 @@ Installation
 ------------
 
 ```
-pip3 install git+https://github.com/winstonwolff/expectorant/
+pip3 install expectorant
 ```
 
