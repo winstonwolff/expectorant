@@ -41,10 +41,12 @@ def load_specs(filenames):
     return singletons.global_suite
 
 def import_spec(filename):
-    stem = Path(filename).stem
-    import_spec = importlib.util.spec_from_file_location(stem, filename)
+    pkg_name = 'expectorantloader_' + str(Path(filename).with_suffix('')).replace('/', '_')
+
+    import_spec = importlib.util.spec_from_file_location(pkg_name, filename)
     m = importlib.util.module_from_spec(import_spec)
     import_spec.loader.exec_module(m)
+    sys.modules[pkg_name] = m
 
 def run_specs(suite, outcomes=singletons.global_outcomes):
     for node in suite.nodes():
