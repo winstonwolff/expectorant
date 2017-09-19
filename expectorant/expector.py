@@ -1,7 +1,15 @@
 from collections import namedtuple
+from pathlib import Path
+from pprint import pformat
+import difflib
 
 Outcome = namedtuple("Outcome", 'passing description')
 
+def caller_source_code(frames_up=2):
+    import inspect
+    src = inspect.stack(context=1)[frames_up]
+    return src.code_context[0].strip()
+#     return "{} ({}:{})".format(src.code_context[0].strip(), Path(src.filename).name, src.lineno)
 
 class _ToClause:
     def __init__(self, expector, actual):
@@ -21,7 +29,11 @@ class _ToClause:
 
     def __eq__(self, expected):
         outcome = (self.actual == expected,
-                   '{} == {}'.format(repr(self.actual), repr(expected)))
+                   '\n'.join([self.expector.source_line]
+                             + list(difflib.unified_diff(pformat(self.actual).split('\n'),
+                                                    pformat(expected).split('\n'), n=99)))
+                  )
+#                                          pformat(self.actual), pformat(expected)))
         self.expector.add_result(*outcome)
         return outcome
 
@@ -83,6 +95,7 @@ class Expector:
 
     def __call__(self, actual):
         '''The first part of the `expect(actual).to(matcher, args)` expression.'''
+        self.source_line = caller_source_code(2)
         return _ToClause(self, actual)
 
 

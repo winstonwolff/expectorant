@@ -3,7 +3,6 @@ from copy import copy
 from . import ansi
 
 
-
 class Node:
     '''Common behavior for TestNodes and Containers'''
     def __init__(self, containers):
@@ -19,7 +18,7 @@ class TestCase(Node):
 
     containers = parents of this test
     name = human readable description
-    test_func = function that executes the test.
+    test_func = function that executes the test, i.e. an it() function
     args = Optional extra parameters that are passed to the test function. See example
 
         >>> def the_test_case(): print('the_test_case ran')
@@ -54,7 +53,15 @@ class TestCase(Node):
             if c.before: c.before()
 
         # run the test itself
-        self.test_func(*self.args)
+        try:
+            self.test_func(*self.args)
+        except Exception as exc:
+            from . import singletons, expector
+            import traceback, sys
+            _, _, tb = sys.exc_info()
+            extracted_tb = traceback.extract_tb(tb)
+            exception_description = "{} -- {}".format(extracted_tb[-1].line, repr(exc))
+            singletons.global_outcomes.append(expector.Outcome(False, exception_description))
 
         # run after funcs
         for c in reversed(self.containers):

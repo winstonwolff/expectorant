@@ -51,6 +51,22 @@
 
 - async specs
 
+- how about AST manipulation? e.g.
+    ```
+    def describe("My great module"):
+        def before():
+            self.mgm = MyGreatModule()
+
+        def context("when something is prepared"):
+            def before():
+                self.mgm.prepare()
+
+            def test("it works"):
+                expect(self.mgm.a) == 3
+    ```
+
+
+
 
 
 ## Done
