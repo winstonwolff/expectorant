@@ -30,8 +30,8 @@ class _ToClause:
     def __eq__(self, expected):
         outcome = (self.actual == expected,
                    '\n'.join([self.expector.source_line]
-                             + list(difflib.unified_diff(pformat(self.actual).split('\n'),
-                                                    pformat(expected).split('\n'), n=99)))
+                             + list(difflib.unified_diff(pformat(expected).split('\n'),
+                                                    pformat(self.actual).split('\n'), n=99)))
                   )
 #                                          pformat(self.actual), pformat(expected)))
         self.expector.add_result(*outcome)
