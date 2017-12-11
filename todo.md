@@ -5,11 +5,12 @@
     pyenv shell 3.5.1
     pip3 install --target . git+git://github.com/winstonwolff/expectorant.git
 
-## Working on
 
-- Publish on PyPi
+## Publish on PyPi
 
-    python setup.py sdist upload -r pypitest
+    pip install twine
+    python setup.py sdist
+    twine upload dist/expectorant-___.tar.gz
 
 
 ## To Do
