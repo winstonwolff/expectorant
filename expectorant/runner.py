@@ -49,17 +49,31 @@ def import_spec(filename):
     sys.modules[pkg_name] = m
 
 def run_specs(suite, outcomes=singletons.global_outcomes):
+    all_outcomes = []
     for node in suite.nodes():
         print("  " * node.depth(), node.name, sep="")
         if node.is_test():
             outcomes.clear()
             node.run()
+            all_outcomes.extend(outcomes)
             for result in outcomes:
                 color = ansi.GREEN if result.passing else ansi.RED
                 print(color, "  " * (node.depth() + 1), result.description, ansi.RESET, sep="")
+    return all_outcomes
+
 
 
 def main():
     files = find_files(sys.argv[1:])
     suite = load_specs(files)
-    run_specs(suite)
+    outcomes = run_specs(suite)
+
+    failures = [result for result in outcomes if not result.passing]
+    num_failing = len(failures)
+    print('{} failures:'.format(num_failing))
+    for i, result in enumerate(failures):
+        print(ansi.RED, '  (', i, ') ', result.description, ansi.RESET, sep='')
+    exit_code = 1 if num_failing else 0
+    print('exit code:', exit_code)
+    exit(exit_code)
+
