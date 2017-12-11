@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-VERSION = '0.4.1' # should match git tag
+VERSION = '0.4.2' # should match git tag
 
 setup(
     name = 'expectorant',
