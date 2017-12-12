@@ -70,13 +70,20 @@ def main():
     suite = load_specs(files)
     outcomes = run_specs(suite)
 
+    passing = [outcome for outcome in outcomes if outcome.passing]
     failures = [outcome for outcome in outcomes if not outcome.passing]
     num_failing = len(failures)
-    print('{} failures:'.format(num_failing))
+    print()
+    print('{ansi.GREEN}Passing: {count}{ansi.RESET}'.format(count=len(passing), ansi=ansi))
+    print('{color}Failing: {count}{ansi.RESET}'.format(
+        count=num_failing,
+        color = ansi.RED if num_failing else '',
+        ansi=ansi))
     for i, outcome in enumerate(failures):
         print(ansi.RED, '  (', i, ') ', outcome.source.filename, ':', outcome.source.lineno, ansi.RESET, sep='')
-        print(outcome.description)
+        print('     ', outcome.source_line)
+        print('     ', outcome.description)
     exit_code = 1 if num_failing else 0
-    print('exit code:', exit_code)
+    print('Exit code:', exit_code)
     exit(exit_code)
 

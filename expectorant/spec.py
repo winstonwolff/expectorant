@@ -60,8 +60,9 @@ class TestCase(Node):
             import traceback, sys
             _, _, tb = sys.exc_info()
             extracted_tb = traceback.extract_tb(tb)
-            exception_description = "{} -- {}".format(extracted_tb[-1].line, repr(exc))
-            singletons.global_outcomes.append(expector.Outcome(False, exception_description))
+            frame_summary = extracted_tb[-1]
+            exception_description = repr(exc)
+            singletons.global_outcomes.append(expector.Outcome(frame_summary, frame_summary.line, False, exception_description))
 
         # run after funcs
         for c in reversed(self.containers):
