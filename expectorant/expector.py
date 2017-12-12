@@ -3,12 +3,12 @@ from pathlib import Path
 from pprint import pformat
 import difflib
 
-Outcome = namedtuple("Outcome", 'passing description')
+Outcome = namedtuple("Outcome", 'source source_line passing description')
 
 def caller_source_code(frames_up=2):
     import inspect
     src = inspect.stack(context=1)[frames_up]
-    return src.code_context[0].strip()
+    return src
 #     return "{} ({}:{})".format(src.code_context[0].strip(), Path(src.filename).name, src.lineno)
 
 class _ToClause:
@@ -18,53 +18,54 @@ class _ToClause:
 
     def to(self, matcher, *args, **kwargs):
         is_passing, description = matcher(self.actual, *args, **kwargs)
-        self.expector.add_result(is_passing, description)
+        self.expector.add_outcome(is_passing, description)
         return (is_passing, description)
 
     def to_not(self, matcher, *args, **kwargs):
         is_passing, description = matcher(self.actual, *args, **kwargs)
         inverted_is_passing = not is_passing
-        self.expector.add_result(inverted_is_passing, description)
+        self.expector.add_outcome(inverted_is_passing, description)
         return (inverted_is_passing, description)
 
     def __eq__(self, expected):
-        outcome = (self.actual == expected,
-                   '\n'.join([self.expector.source_line]
-                             + list(difflib.unified_diff(pformat(expected).split('\n'),
-                                                    pformat(self.actual).split('\n'), n=99)))
-                  )
-#                                          pformat(self.actual), pformat(expected)))
-        self.expector.add_result(*outcome)
+        outcome = equal(self.actual, expected)
+#         outcome = (self.actual == expected,
+#                    '\n'.join([self.expector.source_line]
+#                              + list(difflib.unified_diff(pformat(expected).split('\n'),
+#                                                     pformat(self.actual).split('\n'), n=99)))
+#                   )
+# #                                          pformat(self.actual), pformat(expected)))
+        self.expector.add_outcome(*outcome)
         return outcome
 
     def __ne__(self, expected):
         outcome = (self.actual != expected,
                    '{} != {}'.format(repr(self.actual), repr(expected)))
-        self.expector.add_result(*outcome)
+        self.expector.add_outcome(*outcome)
         return outcome
 
     def __gt__(self, expected):
         outcome = (self.actual > expected,
                    '{} > {}'.format(repr(self.actual), repr(expected)))
-        self.expector.add_result(*outcome)
+        self.expector.add_outcome(*outcome)
         return outcome
 
     def __ge__(self, expected):
         outcome = (self.actual >= expected,
                    '{} >= {}'.format(repr(self.actual), repr(expected)))
-        self.expector.add_result(*outcome)
+        self.expector.add_outcome(*outcome)
         return outcome
 
     def __lt__(self, expected):
         outcome = (self.actual < expected,
                    '{} < {}'.format(repr(self.actual), repr(expected)))
-        self.expector.add_result(*outcome)
+        self.expector.add_outcome(*outcome)
         return outcome
 
     def __le__(self, expected):
         outcome = (self.actual <= expected,
                    '{} <= {}'.format(repr(self.actual), repr(expected)))
-        self.expector.add_result(*outcome)
+        self.expector.add_outcome(*outcome)
         return outcome
 
 class Expector:
@@ -90,12 +91,14 @@ class Expector:
     def __init__(self, outcomes):
         self.results = outcomes
 
-    def add_result(self, is_passing, description):
-        self.results.append(Outcome(is_passing, description))
+    def add_outcome(self, is_passing, description):
+        self.results.append(Outcome(self.source, self.source_line, is_passing, description))
+        self.source = self.source_line = None
 
     def __call__(self, actual):
         '''The first part of the `expect(actual).to(matcher, args)` expression.'''
-        self.source_line = caller_source_code(2)
+        self.source = caller_source_code(2)
+        self.source_line = self.source.code_context[0].strip()
         return _ToClause(self, actual)
 
 
@@ -112,8 +115,15 @@ def equal(actual, expected):
     '''
     is_passing = (actual == expected)
 
-    description = "equal: expect {} == {}".format(actual, expected)
-    return is_passing, description
+    types_to_diff = (str, dict, list, tuple)
+    if not is_passing and isinstance(expected, types_to_diff) and isinstance(actual, types_to_diff):
+        readable_diff = difflib.unified_diff(pformat(expected).split('\n'),
+                                             pformat(actual).split('\n'), n=99)
+        description = '\n'.join(['equal:'] + list(readable_diff))
+    else:
+        description = "equal: expect {} == {}".format(actual, expected)
+    outcome = (is_passing, description)
+    return outcome
 
 def raise_error(subject, error_class):
     '''

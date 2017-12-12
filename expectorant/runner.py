@@ -3,6 +3,7 @@ from pathlib import Path
 import glob
 import sys
 from os import path
+from collections import namedtuple
 
 from . import spec
 from . import ansi
@@ -56,10 +57,11 @@ def run_specs(suite, outcomes=singletons.global_outcomes):
             outcomes.clear()
             node.run()
             all_outcomes.extend(outcomes)
-            for result in outcomes:
-                color = ansi.GREEN if result.passing else ansi.RED
-                print(color, "  " * (node.depth() + 1), result.description, ansi.RESET, sep="")
-    return all_outcomes
+            for outcome in outcomes:
+                color = ansi.GREEN if outcome.passing else ansi.RED
+                print(color, "  " * (node.depth() + 1), outcome.source_line, ansi.RESET, sep="")
+                print(color, "  ", "  " * (node.depth() + 1), outcome.description, ansi.RESET, sep="")
+    return all_outcomes # e.g. [[node1, outcome1.1], [node1, outcome1.2], [node2, outcome2.1]...]
 
 
 
@@ -68,11 +70,12 @@ def main():
     suite = load_specs(files)
     outcomes = run_specs(suite)
 
-    failures = [result for result in outcomes if not result.passing]
+    failures = [outcome for outcome in outcomes if not outcome.passing]
     num_failing = len(failures)
     print('{} failures:'.format(num_failing))
-    for i, result in enumerate(failures):
-        print(ansi.RED, '  (', i, ') ', result.description, ansi.RESET, sep='')
+    for i, outcome in enumerate(failures):
+        print(ansi.RED, '  (', i, ') ', outcome.source.filename, ':', outcome.source.lineno, ansi.RESET, sep='')
+        print(outcome.description)
     exit_code = 1 if num_failing else 0
     print('exit code:', exit_code)
     exit(exit_code)
