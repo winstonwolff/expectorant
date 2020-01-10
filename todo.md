@@ -8,6 +8,10 @@
 
 ## Publish on PyPi
 
+    edit setup.py > VERSION
+    git tag <major.minor.patch>
+    git add . && git commit -m "version <major.minor.patch>" && git push origin <major.minor.patch>
+
     pip install twine
     python setup.py sdist
     twine upload dist/expectorant-___.tar.gz
